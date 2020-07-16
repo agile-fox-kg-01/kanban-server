@@ -102,8 +102,8 @@
         ```
 
 
-
-**Get Task**
+----
+**Get Tasks**
 ----
     Get All Task 
 
