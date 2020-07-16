@@ -34,6 +34,12 @@ const errorHandler = (err, req, res, next) => {
             })
 
             break;
+        case 'not unique':
+            res.status(400).json({
+                error : 'Email already exist'
+            })
+
+            break;
         default:
             res.status(500).json({
                 error : "Internal Server Error"

@@ -1,0 +1,110 @@
+# FancyTodo-Server
+
+  Deploy Here:
+
+[FancyTodo_Server](http://localhost:3000)
+
+## API Documentation
+
+  **Create Todo**
+----
+  Make new todo 
+
+* **URL**
+
+  /todos/
+
+* **Method:**
+  
+  `POST`
+
+* **Request Headers**
+
+  | key | value | required |
+  | :---: | :---: | :---: |
+  | token | jsonwebtoken | true |
+  
+* **URL Params**
+
+   none
+
+* **Data Params**
+
+  | key | value | required |
+  | :---: | :---: | :---: |
+  | title | STRING | true |
+  | description | STRING | true |
+  | status | STRING | true |
+  | due_date | DATE | true |
+  | place | STRING | false |
+  | UserId | INTEGER | true |
+
+
+* **Success Response:**
+  
+  
+  * **Code:** 201 CREATED <br />
+    **Content:** 
+    ```json
+    {
+    "id": 1,
+    "title": "Tugas Pertama",
+    "description": "Mengerjakan Dokumentasi API",
+    "status": "On Progres",
+    "due_date": "2020-07-08T17:00:00.000Z",
+    "UserId": 1,
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 BAD REQUEST <br />
+        **Content:** 
+        ```json
+        { "error" : ["Field Title Cannot Be Empty!"] }
+        ```
+
+        OR
+
+        ```json
+        { "error" : ["Field Title Null!"] }
+        ```
+
+        OR
+
+        ```json
+        { "error" : ["Field Description Cannot Be Empty"] }
+        ```
+
+        OR
+
+        ```json
+        { "error" : ["Field Status Cannot Be Empty"] }
+        ```
+        OR
+
+        ```json
+        { "error" : ["Field Due Date Cannot Be Empty"] }
+        ```
+        OR
+
+        ```json
+        { "error" : ["Field Due Date Invalid Format"] }
+        ```
+
+    OR
+
+    * **Code:** 404 UNAUTHORIZED <br />
+        **Content:** 
+        ```json
+        { "error" : "You have Unauthorized token!" }
+        ```
+
+    OR
+
+    * **Code:** 500 INTERNAL SERVER ERROR <br />
+        **Content:** 
+        ```json
+        { "error" : "internal server error" }
+        ```
+

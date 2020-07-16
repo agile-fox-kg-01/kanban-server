@@ -34,8 +34,8 @@ module.exports = (sequelize, DataTypes) => {
 
       validate: {
         isIn: {
-          args: [['backlog', 'production', 'development', 'done']],
-          msg: 'Must be in Backlog, Development, Production, Done. '
+          args: [['backlog', 'todo', 'doing', 'done']],
+          msg: 'Must be in backlog, todo, doing, done. '
         },
         notEmpty: {
           args: true,

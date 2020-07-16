@@ -45,6 +45,17 @@ class UserController {
             password: req.body.password
         }
         try{
+
+            const userEmail = await User.findOne({
+                where:{
+                    email: newUser.email
+                },
+                returning : true
+            })
+
+            if(userEmail){
+                throw { name: 'not unique'}
+            }
             const user = await User.create(newUser)
 
             res.status(201).json({

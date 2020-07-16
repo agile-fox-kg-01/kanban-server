@@ -35,8 +35,10 @@ class TaskController  {
             category: req.body.category,
             UserId: req.userLogin.id
         }
+        console.log(newTask)
         try {
             const task = await Task.create(newTask)
+            console.log(task)
             res.status(201).json(task)
         } catch (err){
             next(err)
@@ -75,7 +77,9 @@ class TaskController  {
             const task = await Task.destroy({where : {
                 id:idInput
             }})
-            res.status(200).json(task)
+            res.status(200).json({
+                message: "Delete Success!"
+            })
         } catch(err){
             next({
                 name: err.name
