@@ -49,11 +49,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         
       }
-    }
+    },
+    organization: DataTypes.STRING
   }, {
     hooks : {
       beforeCreate : (user) => {
-        user.password = hashPassword(user.password)
+        user.password = hashPassword(user.password),
+        user.organization = 'Hacktiv8'
       }
     },
     sequelize,
