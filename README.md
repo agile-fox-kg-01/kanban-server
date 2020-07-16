@@ -2,7 +2,7 @@
 
 **Link Deploy :**
 
-* **[Kanban_Server](https://kanban-ichlasul.herokuapp.com/)**
+* **[Kanban_Server](https://mykanban-ichlasul.herokuapp.com/)**
 * **[Kanban_Client](https://kanban-ichlasul.web.app/)**
 
 ## API Documentation
@@ -70,7 +70,7 @@
         OR
 
         ```json
-        { "error" : ["Must be in Backlog, Development, Production, Done. "] }
+        { "error" : ["Must be in backlog, todo, doing, done."] }
         ```
 
         OR
@@ -292,7 +292,7 @@
         OR
 
         ```json
-        { "error" : ["Must be in Backlog, Development, Production, Done. "] }
+        { "error" : ["Must be in backlog, todo, doing, done."] }
         ```
 
         OR

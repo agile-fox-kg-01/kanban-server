@@ -2,8 +2,54 @@ const { User } = require('../models/index')
 
 const { comparePassword } = require('../helpers/bcrypt')
 const { signToken } = require('../helpers/jwt')
+const { verify } = require('../helpers/googleOauth')
 
 class UserController {
+
+    // Login With Google
+    static async oauthGoogle(req,res){
+        const id_token = req.headers.id_token
+
+        try {
+            const googlePayload = await verify(id_token)
+            const googleEmail =  googlePayload.email
+
+            const user = await User.findOne({
+                where:{
+                    email: googleemail
+                }
+            })
+            if(user){
+                if(!comparePassword(process.env.GOOGLE_DEFAULT_PASSWORD, user.password)){
+                    throw 'please login via website'
+                } else {
+                    const payload = {
+                        email: user.email
+                    }
+                    const token = signToken(payload)
+
+                    res.status(200).json(token)
+                }
+
+            } else {
+                let user = User.create({
+                    email: googleEmail,
+                    password: process.env.GOOGLE_DEFAULT_PASSWORD
+                })
+
+                const payload = {
+                    email: user.email
+                }
+                const token = signToken(payload)
+
+                res.status(201).json(token)
+            }
+
+        } catch (err) {
+            res.status(500).json(err)
+        }
+
+    }
 
     // Login
     static async postLogin(req,res){
