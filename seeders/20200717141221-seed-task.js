@@ -15,8 +15,8 @@ module.exports = {
         title: 'Kanban app server',
         category: 'Backlog',
         UserId: 1,
-        createdAt = new Date(),
-        updatedAt = new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       }];
 
       await queryInterface.bulkInsert('Tasks', data, {});

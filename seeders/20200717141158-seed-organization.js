@@ -13,8 +13,8 @@ module.exports = {
     */
       let data = [{
         name: 'Hacktiv8',
-        createdAt = new Date(),
-        updatedAt = new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       }];
 
       await queryInterface.bulkInsert('Organizations', data, {});
@@ -28,6 +28,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-      await queryInterface.bulDelete('Organizations', null);
+      await queryInterface.bulkDelete('Organizations', null);
   }
 };
