@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 const errorHandler = require('./middlewares/errorHandler.js')
 const routes = require('./routes/index.js')
 const cors = require('cors')
