@@ -9,7 +9,7 @@ async function authentication(req, res, next) {
         const payload = verifyToken(token)
         try {
             const user = await User.findOne({
-                where: {email: payload}
+                where: {email: payload.email}
             })
             if (!user) {
                 res.status(401).json({ error: 'login first' })
@@ -18,6 +18,7 @@ async function authentication(req, res, next) {
                 next()
             }
         } catch (err) {
+            // console.log(err)
             res.status(500).json({
                 error: 'internal server error'
             })

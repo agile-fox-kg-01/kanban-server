@@ -1,6 +1,7 @@
 const { User } = require('../models/index')
 const { comparePassword } = require('../helpers/bcrypt')
 const { signToken } = require('../helpers/jwt')
+const { verify } = require('../helpers/googleOauth')
 
 class UserController {
     static async register(req, res, next) {
@@ -10,7 +11,10 @@ class UserController {
         }
         try {
             const newUser = await User.create(user)
-            const token = signToken(newUser.email)
+            const payload = {
+                email: newUser.email
+            }
+            const token = signToken(payload)
             res.status(201).json({ token })
         } catch (err) {
             if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
@@ -40,11 +44,45 @@ class UserController {
                     errors: 'invalid username or password'
                 })
             } else {
-                const token = signToken(user.email)
+                const payload = {
+                    email: user.email
+                }
+                const token = signToken(payload)
                 res.status(200).json({ token })
             }
         } catch (err) {
             next(err)
+        }
+    }
+
+    static async oauthGoogle(req, res) {
+        const google_token = req.headers.google_token
+        try {
+            const payload = await verify(google_token)
+            const user = await User.findOne({where: {
+                email: payload.email
+            }})
+            const newPayload = {
+                email: payload.email
+            }
+            if (!user) {
+                const newUser = {
+                    email: payload.email,
+                    password: process.env.DEFAULT_GOOGLEPASS
+                }
+                await User.create(newUser)                
+                const token = signToken(newPayload)
+                res.status(201).json({
+                    token
+                })
+            } else {
+                const token = signToken(newPayload)
+                res.status(200).json({
+                    token
+                })
+            }
+        } catch (err) {
+            res.status(500).json(err)
         }
     }
 }
