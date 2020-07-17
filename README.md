@@ -9,7 +9,7 @@
 
   Deploy Here:
 
-[Kanban-Server](http://localhost:3000)
+[Kanban-Server](https://aarsandi-kanband.herokuapp.com)
 
 ## API Documentation
 
