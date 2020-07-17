@@ -8,6 +8,7 @@ module.exports = {
     let data = JSON.parse(fs.readFileSync('user.json', 'utf8'))
     data = data.map(temp => {
       temp.password = hashPassword(temp.password)
+      temp.organization = 'Hacktiv8'
       temp.createdAt = new Date()
       temp.updatedAt = new Date()
       return temp

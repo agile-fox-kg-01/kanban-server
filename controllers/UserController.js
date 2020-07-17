@@ -13,7 +13,7 @@ class UserController {
             const token = signToken(newUser.email)
             res.status(201).json({ token })
         } catch (err) {
-            if (err.name === "SequelizeValidationError") {
+            if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
                 next({
                     name: 'ValidationError',
                     errors: err.errors[0].message
