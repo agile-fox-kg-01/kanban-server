@@ -2,7 +2,7 @@
 
   Deploy Here:
 
-[Kanban-server](http://localhost:3000)
+[Kanban-server](https://project-2-kanban-app.herokuapp.com/)
 
 ## API Documentation
 
