@@ -1,7 +1,7 @@
 {
   "name": "kanban-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Deploy Here:",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -28,5 +28,6 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.0",
     "sequelize": "^6.3.3"
-  }
+  },
+  "devDependencies": {}
 }
