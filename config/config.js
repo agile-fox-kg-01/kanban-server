@@ -17,6 +17,6 @@ module.exports =
     "dialect": "mysql"
   },
   "production": {
-    "user_env_variable": "DATABASE_URL"
+    "use_env_variable": "DATABASE_URL"
   }
 }
