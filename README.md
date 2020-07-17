@@ -3,7 +3,7 @@
 **Link Deploy :**
 
 * **[Kanban_Server](https://mykanban-ichlasul.herokuapp.com/)**
-* **[Kanban_Client](https://kanban-ichlasul.web.app/)**
+* **[Kanban_Client](https://mykanban-ichlasul.web.app/)**
 
 ## API Documentation
 

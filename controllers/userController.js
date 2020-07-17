@@ -9,14 +9,20 @@ class UserController {
     // Login With Google
     static async oauthGoogle(req,res){
         const id_token = req.headers.id_token
+        console.log("id token: ", id_token)
 
         try {
             const googlePayload = await verify(id_token)
+            console.log(`
+            google payload : ${googlePayload}
+            `)
             const googleEmail =  googlePayload.email
-
+            console.log(`
+            google email: ${googleEmail}
+            `)
             const user = await User.findOne({
                 where:{
-                    email: googleemail
+                    email: googleEmail
                 }
             })
             if(user){
@@ -27,12 +33,13 @@ class UserController {
                         email: user.email
                     }
                     const token = signToken(payload)
+                    console.log('line36')
 
-                    res.status(200).json(token)
+                    res.status(200).json({ token })
                 }
 
             } else {
-                let user = User.create({
+                let user = await User.create({
                     email: googleEmail,
                     password: process.env.GOOGLE_DEFAULT_PASSWORD
                 })
@@ -41,11 +48,12 @@ class UserController {
                     email: user.email
                 }
                 const token = signToken(payload)
-
-                res.status(201).json(token)
+                console.log('line50')
+                res.status(201).json({ token })
             }
 
         } catch (err) {
+            console.log(err)
             res.status(500).json(err)
         }
 
@@ -84,8 +92,8 @@ class UserController {
 
     // register
     static async postRegister(req,res,next){
-        console.log(req.body.email)
-        console.log(req.body.password)
+        // console.log(req.body.email)
+        // console.log(req.body.password)
         const newUser = {
             email: req.body.email,
             password: req.body.password
