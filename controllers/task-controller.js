@@ -2,7 +2,7 @@ const { Task } = require('../models/index.js');
 
 class TaskController {
     static async getTaskRootHandler(req, res, next) {
-        const userId = req.loggedInUser.UserId;
+        const userId = req.loggedInUser.id;
 
         try {
             const tasks = await Task.findAll({
@@ -19,10 +19,10 @@ class TaskController {
     }
 
     static async postTaskRootHandler(req, res, next) {
+        console.log(req.loggedInUser);
         const objTask = {
             title: req.body.title,
-            category: req.body.category,
-            UserId: req.loggedInUser.UserId
+            UserId: req.loggedInUser.id
         }
 
         try {

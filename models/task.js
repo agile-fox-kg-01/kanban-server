@@ -18,21 +18,30 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       validate: {
-        args: true,
-        msg: 'Title is required' 
+        notEmpty: {
+          args: true,
+          msg: 'Title is required'
+        }
       }
     },
     category: {
       type: DataTypes.STRING,
       validate: {
-        args: true,
-        msg: 'Category is required'
+        notEmpty: {
+          args: true,
+          msg: 'Category is required'
+        }
       }
     },
     UserId: {
       type: DataTypes.INTEGER
     }
   }, {
+    hooks: {
+      beforeCreate: (task) => {
+        task.category = 'Backlog';
+      }
+    },
     sequelize,
     modelName: 'Task',
   });
