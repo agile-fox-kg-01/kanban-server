@@ -41,24 +41,26 @@ class TaskController {
   }
 
   static async edit(req, res, next) {
-    const id = Number(req.params.id)
+    const taskId = Number(req.params.id)
     const data = req.body
 
     try {
-      const editData = await Task.update({
+      const task = await Task.update({
         title: data.title,
         description: data.description,
         category: data.category,
         UserId: userLogin.id
       }, {
         where: {
-          id: id
+          id: taskId
         }
       })
-      res.status(201).json({
-        data: editData
+      console.log(task);
+      res.status(200).json({
+        task
       })
     } catch (err) {
+
       next(err)
     }
   }

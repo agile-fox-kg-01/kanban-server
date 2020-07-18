@@ -4,9 +4,9 @@ const { User, Task } = require('../models/index.js')
 
 async function authentication(req, res, next) {
   const token = req.headers.access_token
-  console.log(token);
+  // console.log(token);
   if (!token) {
-    console.log('yesss');
+    // console.log('yesss');
     res.status(404).json({
       status: 404,
       message: `Please login first`
@@ -25,11 +25,12 @@ async function authentication(req, res, next) {
       if (!dataUser) {
         throw ({
           name: `NotFound`,
-          errors: `Please login first`
+          message: `Please login first`
         })
       }
       else {
         userLogin = dataUser
+
         next()
       }
     } catch (err) {
@@ -48,7 +49,7 @@ async function authorization(req, res, next) {
     if (!task) {
       res.status(404).json({
         status: 404,
-        message: `not found`
+        message: `Task not found`
       })
     } else {
       if (task.UserId !== userLogin.id) {

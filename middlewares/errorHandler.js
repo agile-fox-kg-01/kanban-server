@@ -19,7 +19,7 @@ function errorHandler(err, req, res, next) {
       break;
     case 'SequelizeUniqueConstraintError':
       status = 400
-      message = 'email has been used, please login or try another email'
+      message = 'Email has been taken, please login or try another email'
       break;
     case 'SequelizeValidationError':
       status = 400

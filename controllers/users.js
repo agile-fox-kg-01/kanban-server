@@ -75,7 +75,7 @@ class UserController {
       }
     } catch (err) {
       res.status(400).json(
-        'email sudah terdaftar'
+        'Email has been taken. Please log in or try another email '
         // status: 400,
         // message: err.message
       )

@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'fullname field must be filled'
+          msg: 'Fullname must be filled. Try again!'
         }
       }
     },
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         isEmail: {
-          msg: "please fill with email"
+          msg: "Please use a valid email. Try again!"
         }
       }
     },
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "please fill password field"
+          msg: "Please provide password. Try again!"
         }
       }
     },
@@ -47,7 +47,6 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(user) {
         user.password = hashPass(user.password)
-        user.organization = "Hacktiv8"
       }
 
     },
