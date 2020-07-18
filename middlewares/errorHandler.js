@@ -28,6 +28,10 @@ function errorHandler(err, req, res, next) {
         message.push(err.message)
       })
       break;
+    case 'GoogleAccountError':
+      status = 400
+      message = err.message
+      break;
   }
   res.status(status).json({
     status, message

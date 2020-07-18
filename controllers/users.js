@@ -26,6 +26,61 @@ class UserController {
       next(err)
     }
   }
+  static async googleLogin(req, res) {
+    const google_token = req.headers.google_token
+    console.log(google_token);
+
+    try {
+      const payload = await verify(google_token)
+      console.log(payload);
+      const email = payload.email
+
+      const user = await User.findOne({
+        where: {
+          email: email
+        }
+      })
+      if (user) {
+
+        if (!comparePass(process.env.GOOGLE_DEFAULT_BROWSER, user.password)) {
+          throw {
+            name: 'GoogleAccountError',
+            message: 'Please login via website instead'
+          }
+        } else {
+          const payload = {
+            email: user.email
+          }
+          const access_token = await generateToken(payload)
+
+          res.status(200).json({
+            access_token
+          })
+        }
+
+      } else {
+        let user = await User.create({
+          fullname: email,
+          email: email,
+          password: process.env.GOOGLE_DEFAULT_BROWSER
+        })
+
+        const payload = {
+          email: user.email
+        }
+        const access_token = generateToken(payload)
+        res.status(200).json({
+          access_token
+        })
+      }
+    } catch (err) {
+      res.status(400).json(
+        'email sudah terdaftar'
+        // status: 400,
+        // message: err.message
+      )
+    }
+  }
 
   static async login(req, res, next) {
     const data = req.body
@@ -61,52 +116,7 @@ class UserController {
     }
   }
 
-  static async googleLogin(req, res) {
-    const google_token = req.headers.google_token
 
-    try {
-      const payload = await verify(google_token)
-      console.log(payload);
-      const email = payload.email
-
-      const user = await User.findOne({
-        where: {
-          email: email
-        }
-      })
-      if (user) {
-
-        if (!comparePass(process.env.GOOGLE_DEFAULT_BROWSER, user.password)) {
-          throw 'please login via website'
-        } else {
-          const payload = {
-            email: user.email
-          }
-          const token = generateToken(payload)
-
-          res.status(200).json({
-            token
-          })
-        }
-
-      } else {
-        let user = User.create({
-          email: email,
-          password: process.env.GOOGLE_DEFAULT_BROWSER
-        })
-
-        const payload = {
-          email: user.email
-        }
-        const token = generateToken(payload)
-        res.status(200).json({
-          token: token
-        })
-      }
-    } catch (error) {
-      next(error)
-    }
-  }
 }
 
 module.exports = UserController
