@@ -28,12 +28,12 @@ class UserController {
   }
   static async googleLogin(req, res) {
     const google_token = req.headers.google_token
-    console.log(google_token);
+
 
     try {
-      const payload = await verify(google_token)
-      console.log(payload);
-      const email = payload.email
+      const payload1 = await verify(google_token)
+
+      const email = payload1.email
 
       const user = await User.findOne({
         where: {
@@ -60,9 +60,10 @@ class UserController {
 
       } else {
         let user = await User.create({
-          fullname: email,
+          fullname: payload1.name,
           email: email,
-          password: process.env.GOOGLE_DEFAULT_BROWSER
+          password: process.env.GOOGLE_DEFAULT_BROWSER,
+          organization: "Hacktiv8"
         })
 
         const payload = {
@@ -74,6 +75,7 @@ class UserController {
         })
       }
     } catch (err) {
+      console.log(err);
       res.status(400).json(
         'Email has been taken. Please log in or try another email '
         // status: 400,

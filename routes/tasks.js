@@ -7,7 +7,7 @@ router.get('/tasks', authentication, TaskController.findAll)
 router.post('/tasks', authentication, TaskController.create)
 router.put('/tasks/:id', authentication, authorization, TaskController.edit)
 router.delete('/tasks/:id', authentication, authorization, TaskController.delete)
-router.patch('/tasks/:id', authentication, TaskController.editCategory)
+router.patch('/tasks/:id', authentication, authorization, TaskController.editCategory)
 
 
 module.exports = router

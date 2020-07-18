@@ -4,9 +4,9 @@ const { User, Task } = require('../models/index.js')
 
 async function authentication(req, res, next) {
   const token = req.headers.access_token
-  // console.log(token);
+
   if (!token) {
-    // console.log('yesss');
+
     res.status(404).json({
       status: 404,
       message: `Please login first`
@@ -56,7 +56,7 @@ async function authorization(req, res, next) {
 
         res.status(401).json({
           status: 401,
-          error: `Not authorized`
+          message: `Not authorized. This task is not yours`
         })
       } else {
         taskList = task

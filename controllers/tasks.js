@@ -16,7 +16,7 @@ class TaskController {
         tasks
       })
     } catch (err) {
-      console.log('this is erorrrrrrrrr', err);
+
       next(err)
     }
 
@@ -55,7 +55,7 @@ class TaskController {
           id: taskId
         }
       })
-      console.log(task);
+
       res.status(200).json({
         task
       })

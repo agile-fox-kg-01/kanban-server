@@ -7,7 +7,13 @@ function generateToken(payload) {
 }
 
 function decodeToken(token) {
-  const decoded = jwt.verify(token, process.env.SECRET_JWT);
+  let decoded = jwt.verify(token, process.env.SECRET_JWT);
+  if (decoded.email == undefined) {
+    decoded = decoded
+  } else {
+    decoded = decoded.email
+  }
+
   return decoded
 }
 
