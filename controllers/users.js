@@ -29,7 +29,7 @@ class UserController {
   static async googleLogin(req, res) {
     const google_token = req.headers.google_token
 
-
+    console.log(google_token);
     try {
       const payload1 = await verify(google_token)
 
