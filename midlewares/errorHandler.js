@@ -16,6 +16,12 @@ const errorHandler = (err, req, res, next) => {
             })
 
             break;
+        case 'Not Authenticate':
+            res.status(401).json({
+            error: 'You bastart token!'
+            })
+
+            break;
         case 'JsonWebTokenError':
             res.status(400).json({
                 error : 'You dont have(2) token, please login!'

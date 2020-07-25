@@ -1,30 +1,34 @@
 const { User, Task } = require('../models/index')
 const { verifyToken } = require('../helpers/jwt')
 
-async function authentication(req,res,next){
+async function authentication(req, res, next) {
     const token = req.headers.token
-    if(!token){
-        throw { name: 'Not Authorized' }
-    } else {        
-        try {
-            const payload = verifyToken(token)
-            const user = await User.findOne({
-                where: {
-                    email:payload.email
-                }
-            })
-            if(!user){
-                throw { name: 'Email not valid' }
-            } else {
-                req.userLogin = user
-                next()
-            }
-        } catch(err){
-            next({
-                name: err.name
-            })
-        } 
-    }
+
+    console.log(token)
+    try {
+      if (!token) {
+        throw { name: 'Not Authenticate' }
+      } else {
+        const payload = verifyToken(token)
+        const user = await User.findOne({
+          where: {
+            email: payload.email
+          }
+        })
+        if (!user) {
+          throw { name: 'Email not valid' }
+        } else {
+          console.log(user)
+          req.userLogin = user
+          next()
+        }
+      }
+    } catch (err) {
+      next({
+        name: err.name
+      })
+    } 
+    
 }
 
 
