@@ -11,6 +11,8 @@
 
 [Kanban-Server](https://aarsandi-kanband.herokuapp.com)
 
+[Kanban-Client](https://kanban-aarsandi.web.app/)
+
 ## API Documentation
 
 ----
@@ -19,28 +21,30 @@
   login to KanbanApp
 
 * **URL**
+
   login
 
 * **Method:**
+
   `POST`
 
 * **Request Headers**
+
   None
 
 * **URL Params**
+
   None
 
 * **Data Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | email | <user_email> | true |
   | password | <user_password> | true |
-  | organization | <user_organization> | true |
 
 * **Success Response:**
 
-  * **Code:**200 OK <br />
+  * **Code:** 200 OK <br />
     **Content:**
     ```json
     {
@@ -67,28 +71,30 @@
   register new User and send message to email address
 
 * **URL**
+
   /register
 
 * **Method:**
+
   `POST`
 
 * **Request Headers**
+
   None
 
 * **URL Params**
+
   None
 
 * **Data Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | email | <user_email> | true |
   | password | <user_password> | true |
-  | organization | <user_password> | true |
 
 * **Success Response:**
 
-  * **Code:**201 CREATED <br />
+  * **Code:** 201 CREATED <br />
     **Content:**
     ```json
     {
@@ -115,9 +121,11 @@
   SignIn with google email or if user not exist automatically register and send message to email address
 
 * **URL**
+
   /login/google
 
 * **Method:**
+
   `POST`
 
 * **Request Headers**
@@ -126,13 +134,15 @@
   | Token | <GOOGLE_TOKEN> | true |
 
 * **URL Params**
+
   None
 
 * **Data Params**
+
   None
 
 * **Success Response:**
-  * **Code:**200 OK <br />
+  * **Code:** 200 OK <br />
     **Content:**
     ```json
     {
@@ -141,7 +151,7 @@
     ```
     OR
 
-  * **Code:**201 CREATED <br />
+  * **Code:** 201 CREATED <br />
     **Content:**
     ```json
     {
@@ -163,9 +173,11 @@
   see all the user's tasks
 
 * **URL**
+
   /task
 
 * **Method:**
+
   `GET`
 
 * **Request Headers**
@@ -174,14 +186,16 @@
   | Token | <USER_TOKEN> | true |
 
 * **URL Params**
+
   None
 
 * **Data Params**
+
   None
 
 * **Success Response:**
 
-  * **Code:**200 OK <br />
+  * **Code:** 200 OK <br />
     **Content:**
     ```json
     [
@@ -222,9 +236,11 @@
   see one the user's task
 
 * **URL**
+
   /task/:id
 
 * **Method:**
+
   `GET`
 
 * **Request Headers**
@@ -233,17 +249,17 @@
   | Token | <USER_TOKEN> | true |
 
 * **URL Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | id | <TASK_ID> | true |
 
 * **Data Params**
+
   None
 
 * **Success Response:**
 
-  * **Code:**200 OK <br />
+  * **Code:** 200 OK <br />
     **Content:**
     ```json
     [
@@ -287,9 +303,11 @@
   Create a new task
 
 * **URL**
+
   /task/add
 
 * **Method:**
+
   `POST`
 
 * **Request Headers**
@@ -298,18 +316,19 @@
   | Token | <USER_TOKEN> | true |
 
 * **URL Params**
+
   None
 
 * **Data Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | title | <TASK_TITLE> | true |
   | description | <TASK_DESCRIPTION> | true |
+  | category | <TASK_CATEGORY> | true |
 
 * **Success Response:**
 
-  * **Code:**201 CREATED <br />
+  * **Code:** 201 CREATED <br />
     **Content:**
     ```json
     {
@@ -345,9 +364,11 @@
   Edit a user's task
 
 * **URL**
+
   /task/edit/:id
 
 * **Method:**
+
   `PUT`
 
 * **Request Headers**
@@ -356,21 +377,20 @@
   | Token | <USER_TOKEN> | true |
 
 * **URL Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | id | <TASK_ID> | true |
 
 * **Data Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | title | <TASK_TITLE> | true |
   | description | <TASK_DESCRIPTION> | true |
+  | category | <TASK_CATEGORY> | true |
 
 * **Success Response:**
 
-  * **Code:**201 CREATED <br />
+  * **Code:** 201 CREATED <br />
     **Content:**
     ```json
     {
@@ -415,9 +435,11 @@
   Delete a user's Task
 
   * **URL**
+
   /task/delete/:id
 
 * **Method:**
+
   `DELETE`
 
 * **Request Headers**
@@ -426,17 +448,17 @@
   | Token | <USER_TOKEN> | true |
 
 * **URL Params**
-
   | key | value | required |
   | :---: | :---: | :---: |
   | id | <TASK_ID> | true |
 
 * **Data Params**
+
   None
 
 * **Success Response:**
 
-  * **Code:**200 OK <br />
+  * **Code:** 200 OK <br />
     **Content:**
     ```json
     {
@@ -468,3 +490,43 @@
         ```json
         { "error" : "Internal Server Error" }
         ```
+----
+  **Change Category**
+----
+  Change a user's Task Category
+
+  * **URL**
+
+  /task/change/:id
+
+* **Method:**
+
+  `PUT`
+
+* **Request Headers**
+  | key | value | required |
+  | :---: | :---: | :---: |
+  | Token | <USER_TOKEN> | true |
+  | category | <TASK_CATEGORY> | true |
+
+* **URL Params**
+  | key | value | required |
+  | :---: | :---: | :---: |
+  | id | <TASK_ID> | true |
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 201 CREATED <br />
+    **Content:**
+    ```json
+    {
+      "title": "ganti task pertama",
+      "description": "ganti yah",
+      "due_date": "2020-12-12",
+      "category": "doing"
+    }
+    ```
