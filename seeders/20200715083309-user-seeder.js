@@ -5,15 +5,15 @@ const { hashPassword } = require('../helpers/bcrypt')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    let data = JSON.parse(fs.readFileSync('user.json', 'utf8'))
+    let data = JSON.parse(fs.readFileSync('./seeders/json/user.json', 'utf8'))
     data = data.map(temp => {
       temp.password = hashPassword(temp.password)
-      temp.organization = 'Hacktiv8'
+      temp.birthOfDate = new Date()
       temp.createdAt = new Date()
       temp.updatedAt = new Date()
       return temp
     })
-   await queryInterface.bulkInsert('Users', data, {})
+    await queryInterface.bulkInsert('Users', data, {})
   },
 
   down: async (queryInterface, Sequelize) => {

@@ -1,13 +1,22 @@
-const { Task, User } = require('../models/index')
+const { Task, User, Group, GroupUser } = require('../models/index')
 
 class TaskController {
     static async browse(req, res, next) {
         try {
             const tasks = await Task.findAll({
-                include: User,
-                where: {UserId: req.userLogin.id}
+                include: [User, Group],
+                where: { UserId: req.userLogin.id }
             })
-            res.status(200).json(tasks)
+            const usergroup = await User.findByPk(req.userLogin.id, {
+                include: [
+                    { model: Group, as: 'Groups', through: { attributes: [] },
+                    include: [
+                        { model: Task, include: { model: User, attributes: ['username', 'avatar'] } }
+                    ]}
+                ]
+            })
+            const userData = await User.findByPk(req.userLogin.id)
+            res.status(200).json({ myTasks: tasks, groups: usergroup.Groups, user: userData})
         } catch (err) {
             next(err)
         }
@@ -15,45 +24,24 @@ class TaskController {
 
     static async read(req, res, next) {
         try {
-            const task = await Task.findByPk(req.params.id)
-            if(task === null) {
-                next({
-                    name: 'NotFound',
-                    errors: 'Task not found'
-                })
-            } else {
-                res.status(200).json(task)
-            }
+            res.status(200).json(req.task)
         } catch(err) {
             next(err)
         }
     }
 
     static async edit(req, res, next) {
-        const newTask = {
-            title: req.body.title,
-            description: req.body.description,
-        }
+        const { ...data } = req.body
         try {
-            const task = await Task.update(newTask, {
+            await Task.update(data, {
                 where: {id: req.params.id}
             })
-            if(task == 0) {
-                next({
-                    name: 'NotFound',
-                    errors: 'Task Not Found'
-                })
-            } else {
-                res.status(201).json({
-                    title: newTask.title,
-                    description: newTask.description
-                })
-            }
+            res.status(201).json(data)
         } catch (err) {
-            if(err.name === "SequelizeValidationError") {
+            if(err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
                 next({
                     name: 'ValidationError',
-                    errors: err.errors[0].message
+                    error: err.errors[0].message
                 })
             } else {
                 next(err)
@@ -62,21 +50,20 @@ class TaskController {
     }
 
     static async add(req, res, next) {
-        console.log(req.body.category)
-        const task = {
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            UserId: req.userLogin.id
-        }
         try {
-            const result = await Task.create(task)
-            res.status(201).json(result)
+            const { ...data } = req.body
+            if (req.params.groupId > 0) {
+                const result = await Task.create({ ...data, UserId: req.userLogin.id, GroupId: Number(req.params.groupId) })
+                res.status(201).json(result)
+            } else {
+                const result = await Task.create({ ...data, UserId: req.userLogin.id })
+                res.status(201).json(result)
+            }
         } catch (err) {
-            if (err.name === "SequelizeValidationError") {
+            if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
                 next({
                     name: 'ValidationError',
-                    errors: err.errors[0].message
+                    error: err.errors[0].message
                 })
             } else {
                 next(err)
@@ -86,19 +73,8 @@ class TaskController {
     
     static async delete(req, res, next) {
         try {
-            const task = await Task.findByPk(req.params.id)
-            const data = await Task.destroy({where: {id: req.params.id}})
-            if(data == 0) {
-                next({
-                    name: 'NotFound',
-                    errors: 'Task Not Found'
-                })
-            } else {
-                res.status(200).json({
-                    title: task.title,
-                    description: task.description
-                })
-            }
+            await Task.destroy({where: {id: req.params.id}})
+            res.status(200).json(req.task)
         } catch (err) {
             next(err)
         }

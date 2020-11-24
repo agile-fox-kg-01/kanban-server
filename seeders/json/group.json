@@ -1,0 +1,14 @@
+[
+    {
+        "name": "group 1",
+        "description": "group descriptions",
+        "adminId": 2,
+        "groupCode": "codeGroup1"
+    },
+    {
+        "name": "group 2",
+        "description": "group descriptions",
+        "adminId": 4,
+        "groupCode": "codeGoup2"
+    }
+]

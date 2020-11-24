@@ -2,9 +2,7 @@
 const {
   Model
 } = require('sequelize');
-
 const { hashPassword } = require('../helpers/bcrypt')
-
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -15,9 +13,31 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Task)
+      User.hasMany(models.Comment)
+      User.belongsToMany(models.Group, {
+        through: 'GroupUsers',
+        as: 'Groups',
+        foreignKey: 'UserId'
+      })
     }
   };
   User.init({
+    username: {
+      type: DataTypes.STRING,
+      unique: {
+        args: true,
+        msg: 'Username already exists'
+      },      
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'fill in the username field'
+        },
+        notNull: {
+          msg: 'fill in the username field'
+        }
+      }
+    },
     email: {
       type: DataTypes.STRING,
       unique: {
@@ -26,9 +46,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       allowNull: false,
       validate: {
-        isEmail: {
-          args: true,
-          msg: 'Invalid email format'
+        notEmpty: {
+          msg: 'fill in the email field'
         },
         notNull: {
           msg: 'fill in the email field'
@@ -37,19 +56,31 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
-          args: true,
+          msg: 'fill in the password field'
+        },
+        notNull: {
           msg: 'fill in the password field'
         }
       }
     },
-    organization: DataTypes.STRING,
+    firstname: DataTypes.STRING,
+    lastname: DataTypes.STRING,
+    birthOfDate: {
+      type: DataTypes.DATE,
+      validate: {
+        isDate: {
+          msg: 'birth of date must be a date type'
+        }
+      }
+    },
+    avatar: DataTypes.STRING
   }, {
     hooks: {
       beforeCreate(user) {
         user.password = hashPassword(user.password)
-        user.organization = 'Hacktiv8'
       }
     },
     sequelize,

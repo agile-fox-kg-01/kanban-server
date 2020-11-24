@@ -5,22 +5,21 @@ const { verify } = require('../helpers/googleOauth')
 
 class UserController {
     static async register(req, res, next) {
-        const user = {
-            email: req.body.email,
-            password: req.body.password
-        }
+        const { ...data } = req.body
         try {
-            const newUser = await User.create(user)
+            const newUser = await User.create(data)
             const payload = {
                 email: newUser.email
             }
             const token = signToken(payload)
-            res.status(201).json({ token })
+            res.status(201).json({
+                token
+            })
         } catch (err) {
             if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
                 next({
                     name: 'ValidationError',
-                    errors: err.errors[0].message
+                    error: err.errors[0].message
                 })
             } else {
                 next(err)
@@ -36,19 +35,21 @@ class UserController {
             if(!user) {
                 next({
                     name: 'ValidationError',
-                    errors: 'invalid username or password'
+                    error: 'invalid username or password'
                 })
             } else if (!comparePassword(inputPass, dbPass)) {
                 next({
                     name: 'ValidationError',
-                    errors: 'invalid username or password'
+                    error: 'invalid username or password'
                 })
             } else {
                 const payload = {
                     email: user.email
                 }
                 const token = signToken(payload)
-                res.status(200).json({ token })
+                res.status(200).json({
+                    token
+                })
             }
         } catch (err) {
             next(err)
@@ -67,6 +68,7 @@ class UserController {
             }
             if (!user) {
                 const newUser = {
+                    username: payload.email,
                     email: payload.email,
                     password: process.env.DEFAULT_GOOGLEPASS
                 }
@@ -82,7 +84,16 @@ class UserController {
                 })
             }
         } catch (err) {
-            res.status(500).json(err)
+            next(err)
+        }
+    }
+
+    static async browse(req, res) {
+        try {
+            const users = await User.findAll()
+            res.status(200).json(users)
+        } catch (err) {
+            next(err)
         }
     }
 }

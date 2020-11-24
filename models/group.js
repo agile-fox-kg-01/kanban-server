@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Task extends Model {
+  class Group extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,51 +11,49 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Task.hasMany(models.Comment)
-      Task.belongsTo(models.User)
-      Task.belongsTo(models.Group)
+      Group.hasMany(models.Task)
+      Group.belongsToMany(models.User, {
+        through: 'GroupUsers',
+        as: 'Users',
+        foreignKey: 'GroupId'
+      })
     }
   };
-  Task.init({
-    title: {
+  Group.init({
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'fill in the title field'
+          msg: 'fill in the name field'
         },
         notNull: {
-          msg: 'fill in the title field'
+          msg: 'fill in the name field'
         }
       }
     },
-    content: DataTypes.TEXT,
-    category: {
+    description: DataTypes.STRING,
+    avatar: DataTypes.STRING,
+    adminId: DataTypes.INTEGER,
+    groupCode: {
       type: DataTypes.STRING,
+      unique: {
+        args: true,
+        msg: 'Group Code already exists'
+      },      
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'fill in the category field'
+          msg: 'fill in the Group Code field'
         },
         notNull: {
-          msg: 'fill in the category field'
+          msg: 'fill in the Group Code field'
         }
       }
     },
-    duedate: {
-      type: DataTypes.DATE,
-      validate: {
-        isDate: {
-          msg: 'due date must be a date type'
-        }
-      }
-    },
-    UpdatedBy: DataTypes.STRING,
-    UserId: DataTypes.INTEGER,
-    GroupId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'Task',
+    modelName: 'Group',
   });
-  return Task;
+  return Group;
 };
